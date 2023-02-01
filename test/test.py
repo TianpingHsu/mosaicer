@@ -7,6 +7,7 @@ from cv2 import waitKey
 from cv2 import destroyAllWindows
 from cv2 import CascadeClassifier
 from cv2 import rectangle
+import sys
 
 
 def test(input_path: str, output_path = '') -> bool:
@@ -29,19 +30,40 @@ def test(input_path: str, output_path = '') -> bool:
     for box in bboxes:
         x, y, width, height = box
         x2, y2 = x + width, y + height
-        face = cv2.rectangle(img, (x, y), (x2, y2), (0,0,255), 1)
+        img = cv2.rectangle(img, (x, y), (x2, y2), (0,0,255), 1)
         #print('{0} {1} {2} {3}'.format(x, y, width, height))
         print(box)
-        img = cv2.GaussianBlur(img, (7,7), 0)
+        # get face from image
+        face = img[y:y2, x:x2]
+        # perform Gaussian Blur
+        blurred = cv2.GaussianBlur(face, (51,51), 0)
+        # insert blurred face back into origianl image
+        img[y:y2, x:x2] = blurred
+
+        # show the image
+        imshow('face', img)
+        # keep the window open until we press a key
+        waitKey(0)
+        # close the window
+        destroyAllWindows()
+
     cv2.imwrite(output_path, img)
     return True
-    # show the image
-    #imshow('face detection', pixels)
-    # keep the window open until we press a key
-    #waitKey(0)
-    # close the window
-    #destroyAllWindows()
+
+def usage():
+    print('''\
+Usage:
+\t* python3 test.py
+\t* python3 test.py input_path
+\t* python3 test.py input_path output_path
+          ''')
 
 if __name__ == '__main__':
-    test('../res/evelyn-claire.webp')
-    #pass
+    if len(sys.argv) == 1:
+        test('../res/evelyn-claire.webp')
+    elif len(sys.argv) == 2:
+        test(sys.argv[1])
+    elif len(sys.argv) == 3:
+        test(sys.argv[1], sys.argv[2])
+    else:
+        usage()
