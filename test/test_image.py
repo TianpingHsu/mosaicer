@@ -1,4 +1,3 @@
-
 # plot photo with detected faces using opencv cascade classifier
 import cv2
 from cv2 import imread
@@ -8,7 +7,6 @@ from cv2 import destroyAllWindows
 from cv2 import CascadeClassifier
 from cv2 import rectangle
 import sys
-
 
 def test(input_path: str, output_path = '') -> bool:
     import os.path
@@ -53,9 +51,9 @@ def test(input_path: str, output_path = '') -> bool:
 def usage():
     print('''\
 Usage:
-\t* python3 test.py
-\t* python3 test.py input_path
-\t* python3 test.py input_path output_path
+\t* python3 test_image.py
+\t* python3 test_image.py input_path
+\t* python3 test_image.py input_path output_path
           ''')
 
 if __name__ == '__main__':
